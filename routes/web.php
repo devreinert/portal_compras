@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../app/controllers/LoginController.php';
+require_once __DIR__ . '/../app/controllers/ProdutoController.php';
 
 $controller = new LoginController();
 
@@ -15,6 +16,21 @@ if (isset($_GET['route'])) {
         default:
             echo "Rota inválida!";
             break;
+
+        case 'produtos':
+            $controller = new ProdutoController();
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    if (isset($_POST['action'])) {
+                        switch ($_POST['action']) {
+                            case 'create': $controller->store(); break;
+                            case 'update': $controller->update(); break;
+                            case 'delete': $controller->delete(); break;
+                        }
+                    }
+                } else {
+                    $controller->index();
+                }
+                break;
     }
 } else {
     echo "Nenhuma rota especificada.";

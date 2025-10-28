@@ -26,7 +26,7 @@ class LoginController {
                 $_SESSION['usuario_id'] = $user['id'];
 
                 // Envia um cabeçalho HTTP que redireciona o navegador para tela-inicio.php
-                header('Location: ../public/tela-inicio.php');
+                header('Location: ?route=produtos');
                 exit;
             } else {
                 echo "<script>alert('E-mail ou senha inválidos!'); history.back();</script>";
