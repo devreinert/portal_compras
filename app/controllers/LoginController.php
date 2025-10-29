@@ -38,14 +38,38 @@ class LoginController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $senha = $_POST['senha'];
-
+            $confirmar_senha = $_POST['confirmar_senha'];
+    
+            // Validação do e-mail
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo "<script>alert('E-mail inválido!'); history.back();</script>";
+                exit;
+            }
+    
+            // Validação da senha forte
+            $regexSenha = '/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$/';
+            if (!preg_match($regexSenha, $senha)) {
+                echo "<script>alert('A senha deve ter pelo menos 8 caracteres, uma letra maiúscula e um caractere especial.'); history.back();</script>";
+                exit;
+            }
+    
+            // Confirmar senha
+            if ($senha !== $confirmar_senha) {
+                echo "<script>alert('As senhas não coincidem!'); history.back();</script>";
+                exit;
+            }
+    
+            // Se passou em todas as validações, chama o model
             $userModel = new User();
             if ($userModel->register($email, $senha)) {
-                echo "<script>alert('Usuário registrado com sucesso!'); window.location.href='../public/login.php';</script>";
+                echo "<script>alert('Usuário cadastrado com sucesso!'); window.location.href='../public/login.php';</script>";
+                exit;
             } else {
-                echo "<script>alert('Erro ao registrar usuário.'); history.back();</script>";
+                echo "<script>alert('Erro ao cadastrar! Talvez o e-mail já esteja em uso.'); history.back();</script>";
+                exit;
             }
         }
     }
+    
 }
 ?>
